@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Authors>DC</Authors>
+    <Company>ESFA</Company>
+    <Description>Database testing using Visual Studio projects and .Net</Description>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/DC-DatabaseTesting/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/SkillsFundingAgency/DC-DatabaseTesting</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SkillsFundingAgency/DC-DatabaseTesting</RepositoryUrl>
+    <PackageTags>ESFA DC Database Testing Interface</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>ESFA.DC.DatabaseTesting.Interface.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>ESFA.DC.DatabaseTesting.Interface.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.DatabaseTesting.Model.Interface\ESFA.DC.DatabaseTesting.Model.Interface.csproj" />
+  </ItemGroup>
+
+</Project>

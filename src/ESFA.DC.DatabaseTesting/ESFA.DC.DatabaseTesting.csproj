@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Authors>DC</Authors>
+    <Company>ESFA</Company>
+    <Description>Database testing using Visual Studio projects and .Net</Description>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/DC-DatabaseTesting/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/SkillsFundingAgency/DC-DatabaseTesting</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SkillsFundingAgency/DC-DatabaseTesting</RepositoryUrl>
+    <PackageTags>ESFA DC Database Testing Implementation</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>ESFA.DC.DatabaseTesting.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>ESFA.DC.DatabaseTesting.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="FluentAssertions" Version="5.3.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.DatabaseTesting.Interface\ESFA.DC.DatabaseTesting.Interface.csproj" />
+    <ProjectReference Include="..\ESFA.DC.DatabaseTesting.Model\ESFA.DC.DatabaseTesting.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
