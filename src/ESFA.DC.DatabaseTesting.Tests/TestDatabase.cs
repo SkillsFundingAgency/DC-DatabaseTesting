@@ -10,7 +10,7 @@ namespace ESFA.DC.DatabaseTesting.Tests
         [Fact]
         public void TestSchema()
         {
-            IDbConnectorConfiguration dbConnectorConfiguration = new DbConnectorConfiguration(@"Data Source=localhost;Initial Catalog=Testing;Integrated Security=True;Pooling=False;Connect Timeout=30");
+            IDbConnectorConfiguration dbConnectorConfiguration = new DbConnectorConfiguration(@"Data Source=(localdb)\ProjectsV13;Initial Catalog=ESFA.DC.DatabaseTesting.Tests.Database;Integrated Security=True;Pooling=False;Connect Timeout=30");
             IDbConnector dbConnector = new DbConnector(dbConnectorConfiguration);
             ISchemaTests schemaTests = new SchemaTests(dbConnector);
 

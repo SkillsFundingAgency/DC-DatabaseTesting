@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[TestTable] (
-    [ID]        INT            IDENTITY (1, 1) NOT NULL,
+    [ID]        BIGINT            IDENTITY (1, 1) NOT NULL,
     [anInt]     INT            NOT NULL,
     [aString]   NVARCHAR (MAX) NOT NULL,
     [aBool]     BIT            NOT NULL,

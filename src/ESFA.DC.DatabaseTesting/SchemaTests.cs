@@ -22,80 +22,86 @@ namespace ESFA.DC.DatabaseTesting
             actualColumns.Should().HaveCountGreaterThan(0, "there should be columns in the table");
             string columnNames = string.Join(", ", actualColumns.Select(x => x.COLUMN_NAME));
 
-            string because = shouldExist ? "column [{0}] should be in [{1}] and have the correct matching attributes" : "column [{0}] should NOT be in [{1}]";
+            string because = shouldExist ? "column [{0}] should be in [{1}]" : "column [{0}] should NOT be in [{1}]";
 
-            foreach (var column in expectedColumns)
+            foreach (IExpectedColumn column in expectedColumns)
             {
-                actualColumns.Any(c => BuildPredicate(c, column)).Should().Be(shouldExist, because, column.ColumnName, columnNames);
+                IInformationSchema actualColumn = actualColumns.SingleOrDefault(x => x.COLUMN_NAME == column.ColumnName);
+                actualColumn.Should().NotBeNull(because, column.ColumnName, columnNames);
+                if (actualColumn == null)
+                {
+                    continue;
+                }
+
+                CheckColumnAttributes(actualColumn, column);
             }
         }
 
         public void AssertSpResultsColumnsExist(string schema, string procedureName, IEnumerable<IExpectedColumn> expectedColumns, bool shouldExist)
         {
             ISpResultset[] actualColumns = _dbConnnector.FirstResultSetForStoredProcedure(schema, procedureName).ToArray();
+            actualColumns.Should().HaveCountGreaterThan(0, "there should be columns in the table");
+            string columnNames = string.Join(", ", actualColumns.Select(x => x.NAME));
 
             string because = shouldExist ? "column [{0}] should be in [{1}] and have the correct matching attributes" : "column [{0}] should NOT be in [{1}]";
 
             foreach (var column in expectedColumns)
             {
-                actualColumns.Any(c => BuildPredicate(c, column)).Should().Be(shouldExist, because, column.ColumnName);
+                var actualColumn = actualColumns.SingleOrDefault(x => x.NAME == column.ColumnName);
+                actualColumn.Should().NotBeNull(because, column.ColumnName, columnNames);
+                if (actualColumn == null)
+                {
+                    continue;
+                }
+
+                CheckColumnAttributes(actualColumn, column);
             }
         }
 
-        private bool BuildPredicate(IInformationSchema informationSchema, IExpectedColumn expectedColumn)
+        private void CheckColumnAttributes(IInformationSchema informationSchema, IExpectedColumn expectedColumn)
         {
-            bool bReturn = informationSchema.DATA_TYPE.Equals(expectedColumn.DataType, StringComparison.OrdinalIgnoreCase);
-            if (!bReturn)
-            {
-                return false;
-            }
+            informationSchema.DATA_TYPE.Equals(expectedColumn.DataType, StringComparison.OrdinalIgnoreCase).Should().BeTrue("Column {0} should be data type {1} but is {2}", expectedColumn.ColumnName, expectedColumn.DataType, informationSchema.DATA_TYPE);
+            informationSchema.IS_NULLABLE.Should().Be(expectedColumn.IsNullable ? "YES" : "NO", "Column {0} should{1}be nullable", expectedColumn.ColumnName, expectedColumn.IsNullable ? string.Empty : " not ");
 
             switch (informationSchema.DATA_TYPE.ToUpper())
             {
                 case "CHAR":
                 case "VARCHAR":
-                    bReturn = informationSchema.COLUMN_NAME == expectedColumn.ColumnName && informationSchema.CHARACTER_MAXIMUM_LENGTH == expectedColumn.CharacterMaximumLength && informationSchema.IS_NULLABLE == (expectedColumn.IsNullable ? "YES" : "NO");
+                    informationSchema.CHARACTER_MAXIMUM_LENGTH.Should().Be(expectedColumn.CharacterMaximumLength, "Column {0} should have a maximum length of {1}", expectedColumn.ColumnName, expectedColumn.CharacterMaximumLength);
                     break;
                 case "DECIMAL":
-                    bReturn = informationSchema.COLUMN_NAME == expectedColumn.ColumnName && informationSchema.NUMERIC_PRECISION == expectedColumn.NumericPrecision && informationSchema.NUMERIC_SCALE == expectedColumn.NumericScale && informationSchema.IS_NULLABLE == (expectedColumn.IsNullable ? "YES" : "NO");
+                    informationSchema.NUMERIC_PRECISION.Should().Be(expectedColumn.NumericPrecision, "Column {0} should have a number precision of {1}", expectedColumn.ColumnName, expectedColumn.NumericPrecision);
+                    informationSchema.NUMERIC_SCALE.Should().Be(expectedColumn.NumericScale, "Column {0} should have a number scale of {1}", expectedColumn.ColumnName, expectedColumn.NumericScale);
                     break;
                 case "DATE":
-                    bReturn = informationSchema.COLUMN_NAME == expectedColumn.ColumnName && informationSchema.DATETIME_PRECISION == expectedColumn.DatetimePrecision && informationSchema.IS_NULLABLE == (expectedColumn.IsNullable ? "YES" : "NO");
-                    break;
-                default:
-                    bReturn = informationSchema.COLUMN_NAME == expectedColumn.ColumnName && informationSchema.IS_NULLABLE == (expectedColumn.IsNullable ? "YES" : "NO");
+                    informationSchema.DATETIME_PRECISION.Should().Be(expectedColumn.DatetimePrecision, "Column {0} should have a date time precision of {1}", expectedColumn.ColumnName, expectedColumn.DatetimePrecision);
                     break;
             }
 
-            if (bReturn && expectedColumn.OrdinalPosition > 0)
+            if (expectedColumn.OrdinalPosition > 0)
             {
-                bReturn = informationSchema.ORDINAL_POSITION == expectedColumn.OrdinalPosition;
+                informationSchema.ORDINAL_POSITION.Should().Be(expectedColumn.OrdinalPosition, "Column {0} should have an ordinal position of {1}", expectedColumn.ColumnName, expectedColumn.OrdinalPosition);
             }
-
-            return bReturn;
         }
 
-        private bool BuildPredicate(ISpResultset sp, IExpectedColumn expectedColumn)
+        private void CheckColumnAttributes(ISpResultset sp, IExpectedColumn expectedColumn)
         {
-            bool bReturn;
+            sp.Data_Type.Equals(expectedColumn.DataType, StringComparison.OrdinalIgnoreCase).Should().BeTrue("Column {0} should be data type {1} but is {2}", expectedColumn.ColumnName, expectedColumn.DataType, sp.Data_Type);
+
             switch (sp.Data_Type.ToUpper())
             {
                 case "CHAR":
                 case "VARCHAR":
-                    bReturn = sp.NAME == expectedColumn.ColumnName && sp.MAX_LENGTH == expectedColumn.CharacterMaximumLength;
+                    sp.MAX_LENGTH.Should().Be(expectedColumn.CharacterMaximumLength, "Column {0} should have a maximum length of {1}", expectedColumn.ColumnName, expectedColumn.CharacterMaximumLength);
                     break;
                 case "DECIMAL":
-                    bReturn = sp.NAME == expectedColumn.ColumnName && sp.PRECISION == expectedColumn.NumericPrecision && sp.SCALE == expectedColumn.NumericScale;
+                    sp.PRECISION.Should().Be(expectedColumn.NumericPrecision, "Column {0} should have a precision of {1}", expectedColumn.ColumnName, expectedColumn.NumericPrecision);
+                    sp.SCALE.Should().Be(expectedColumn.NumericScale, "Column {0} should have a scale of {1}", expectedColumn.ColumnName, expectedColumn.NumericScale);
                     break;
                 case "DATE":
-                    bReturn = sp.NAME == expectedColumn.ColumnName && sp.PRECISION == expectedColumn.DatetimePrecision;
-                    break;
-                default:
-                    bReturn = sp.NAME == expectedColumn.ColumnName;
+                    sp.PRECISION.Should().Be(expectedColumn.DatetimePrecision, "Column {0} should have a date time precision of {1}", expectedColumn.ColumnName, expectedColumn.DatetimePrecision);
                     break;
             }
-
-            return bReturn;
         }
     }
 }
