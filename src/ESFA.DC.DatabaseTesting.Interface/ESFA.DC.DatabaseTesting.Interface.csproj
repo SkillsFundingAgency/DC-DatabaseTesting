@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.1.0</Version>
     <Authors>DC</Authors>
@@ -29,7 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ESFA.DC.DatabaseTesting.Model.Interface\ESFA.DC.DatabaseTesting.Model.Interface.csproj" />
+    <ProjectReference Include="..\ESFA.DC.DatabaseTesting.Model.Interface\ESFA.DC.DatabaseTesting.Model.Interface.csproj" PrivateAssets="All" />
   </ItemGroup>
+
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
 
 </Project>
