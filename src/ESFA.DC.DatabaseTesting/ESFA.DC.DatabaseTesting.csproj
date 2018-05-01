@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="ESFA.DC.DatabaseTesting.Interface" Version="0.1.0-beta0001" />
     <PackageReference Include="FluentAssertions" Version="5.3.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2">
       <PrivateAssets>All</PrivateAssets>
@@ -31,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ESFA.DC.DatabaseTesting.Interface\ESFA.DC.DatabaseTesting.Interface.csproj" />
     <ProjectReference Include="..\ESFA.DC.DatabaseTesting.Model\ESFA.DC.DatabaseTesting.Model.csproj" />
   </ItemGroup>
 
