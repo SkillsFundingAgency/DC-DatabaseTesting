@@ -27,7 +27,15 @@ namespace ESFA.DC.DatabaseTesting
             foreach (IExpectedColumn column in expectedColumns)
             {
                 IInformationSchema actualColumn = actualColumns.SingleOrDefault(x => x.COLUMN_NAME == column.ColumnName);
-                actualColumn.Should().NotBeNull(because, column.ColumnName, columnNames);
+                if (shouldExist)
+                {
+                    actualColumn.Should().NotBeNull(because, column.ColumnName, columnNames);
+                }
+                else
+                {
+                    actualColumn.Should().BeNull(because, column.ColumnName, columnNames);
+                }
+
                 if (actualColumn == null)
                 {
                     continue;
