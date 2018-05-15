@@ -15,6 +15,12 @@ IDbConnector dbConnector = new DbConnector(dbConnectorConfiguration);
 SchemaTests = new SchemaTests(dbConnector);
 ```
 
+Add the SQL Client NuGet package 
+
+```c#
+System.Data.SqlClient
+```
+
 In your test project define the expected columns for the database table e.g.
 
 ```c#

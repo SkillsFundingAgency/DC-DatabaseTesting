@@ -83,12 +83,22 @@ namespace ESFA.DC.DatabaseTesting
             {
                 case "CHAR":
                 case "VARCHAR":
-                    informationSchema.CHARACTER_MAXIMUM_LENGTH.Should().Be(expectedColumn.CharacterMaximumLength, "Column {0} should have a maximum length of {1}", expectedColumn.ColumnName, expectedColumn.CharacterMaximumLength);
+                case "NVARCHAR":
+                    if (expectedColumn.CharacterMaximumLength > -1)
+                    {
+                        informationSchema.CHARACTER_MAXIMUM_LENGTH.Should().Be(
+                            expectedColumn.CharacterMaximumLength,
+                            "Column {0} should have a maximum length of {1}",
+                            expectedColumn.ColumnName,
+                            expectedColumn.CharacterMaximumLength);
+                    }
+
                     break;
                 case "DECIMAL":
                     informationSchema.NUMERIC_PRECISION.Should().Be(expectedColumn.NumericPrecision, "Column {0} should have a number precision of {1}", expectedColumn.ColumnName, expectedColumn.NumericPrecision);
                     informationSchema.NUMERIC_SCALE.Should().Be(expectedColumn.NumericScale, "Column {0} should have a number scale of {1}", expectedColumn.ColumnName, expectedColumn.NumericScale);
                     break;
+                case "DATETIME":
                 case "DATE":
                     informationSchema.DATETIME_PRECISION.Should().Be(expectedColumn.DatetimePrecision, "Column {0} should have a date time precision of {1}", expectedColumn.ColumnName, expectedColumn.DatetimePrecision);
                     break;

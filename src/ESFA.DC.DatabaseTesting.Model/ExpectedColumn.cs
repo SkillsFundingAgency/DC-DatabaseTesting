@@ -110,6 +110,18 @@ namespace ESFA.DC.DatabaseTesting.Model
             };
         }
 
+        public static ExpectedColumn CreateVarChar(string columnNameVarChar, int ordinalPosition, bool nullable, int characterMaximumLength = -1)
+        {
+            return new ExpectedColumn
+            {
+                OrdinalPosition = ordinalPosition,
+                CharacterMaximumLength = characterMaximumLength,
+                ColumnName = columnNameVarChar,
+                DataType = "varchar",
+                IsNullable = nullable
+            };
+        }
+
         public static ExpectedColumn CreateBit(string columnNameBit, int ordinalPosition, bool nullable)
         {
             return new ExpectedColumn
@@ -142,6 +154,18 @@ namespace ESFA.DC.DatabaseTesting.Model
                 ColumnName = columnNameDateTime,
                 DataType = "datetime",
                 DatetimePrecision = 3,
+                IsNullable = nullable
+            };
+        }
+
+        public static ExpectedColumn CreateDate(string columnNameDate, int ordinalPosition, bool nullable)
+        {
+            return new ExpectedColumn
+            {
+                OrdinalPosition = ordinalPosition,
+                ColumnName = columnNameDate,
+                DataType = "date",
+                DatetimePrecision = 0,
                 IsNullable = nullable
             };
         }
