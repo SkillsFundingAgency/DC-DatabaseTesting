@@ -169,5 +169,16 @@ namespace ESFA.DC.DatabaseTesting.Model
                 IsNullable = nullable
             };
         }
+
+        public static ExpectedColumn CreateXml(string columnNameNvarChar, int ordinalPosition, bool nullable)
+        {
+            return new ExpectedColumn
+            {
+                OrdinalPosition = ordinalPosition,
+                ColumnName = columnNameNvarChar,
+                DataType = "xml",
+                IsNullable = nullable
+            };
+        }
     }
 }
