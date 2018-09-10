@@ -22,7 +22,8 @@ namespace ESFA.DC.DatabaseTesting.Tests
                 ExpectedColumn.CreateNvarChar("aString", 3, false),
                 ExpectedColumn.CreateBit("aBool", 4, false),
                 ExpectedColumn.CreateDecimal("aDecimal", 5, false),
-                ExpectedColumn.CreateDateTime("aDateTime", 6, false)
+                ExpectedColumn.CreateDateTime("aDateTime", 6, false),
+                ExpectedColumn.CreateUniqueIdentifier("aUniqueIdentifier", 7, false)
             };
             schemaTests.AssertTableColumnsExist("dbo", "TestTable", expectedColumns, true);
         }
@@ -41,7 +42,8 @@ namespace ESFA.DC.DatabaseTesting.Tests
                 ExpectedColumn.CreateNvarChar("aStringC", 3, false),
                 ExpectedColumn.CreateBit("aBoolD", 4, false),
                 ExpectedColumn.CreateDecimal("aDecimalE", 5, false),
-                ExpectedColumn.CreateDateTime("aDateTimeF", 6, false)
+                ExpectedColumn.CreateDateTime("aDateTimeF", 6, false),
+                ExpectedColumn.CreateUniqueIdentifier("aUniqueIdentifierG", 7, false),
             };
             schemaTests.AssertTableColumnsExist("dbo", "TestTable", expectedColumns, false);
         }

@@ -180,5 +180,16 @@ namespace ESFA.DC.DatabaseTesting.Model
                 IsNullable = nullable
             };
         }
+
+        public static ExpectedColumn CreateUniqueIdentifier(string columnNameUniqueIdentifier, int ordinalPosition, bool nullable)
+        {
+            return new ExpectedColumn
+            {
+                OrdinalPosition = ordinalPosition,
+                ColumnName = columnNameUniqueIdentifier,
+                DataType = "uniqueidentifier",
+                IsNullable = nullable
+            };
+        }
     }
 }
